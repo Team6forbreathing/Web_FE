@@ -1,8 +1,5 @@
 import React from "react";
-import DashboardComponent from "../Components/Home/DashboardComponent.jsx";
 import MenuBar from "../Bar/MenuBar.jsx";
-import UserInfoComponent from "../Components/Home/UserInfoComponent.jsx";
-import AnalysisResultComponent from "../Components/Home/AnaylsisResultComponenet.jsx";
 
 const HomePage = () => {
   return (

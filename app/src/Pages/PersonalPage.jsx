@@ -1,8 +1,9 @@
 import React from "react";
-import DashboardComponent from "../Components/Home/DashboardComponent.jsx";
+
 import MenuBar from "../Bar/MenuBar.jsx";
-import UserInfoComponent from "../Components/Home/UserInfoComponent.jsx";
-import AnaylsisResultComponenet from "../Components/Home/AnaylsisResultComponenet";
+import DashboardComponent from "../Components/MyPage/DashboardComponent.jsx";
+import UserInfoComponent from "../Components/MyPage/UserInfoComponent.jsx";
+import AnaylsisResultComponenet from "../Components/MyPage/AnaylsisResultComponenet.jsx";
 
 const PersonalPage = () => {
   return (
