@@ -19,12 +19,6 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'  # Node 20으로 업그레이드
-          cache: 'npm'
-          cache-dependency-path: ./app/package-lock.json
       - name: Create .env.production file
         run: |
           echo "VITE_LOGIN_API_URL=${{ secrets.VITE_LOGIN_API_URL }}" > .env.production
@@ -32,17 +26,6 @@ jobs:
         working-directory: ./app
       - name: Debug .env.production
         run: cat ./app/.env.production
-      - name: Clear npm cache
-        run: npm cache clean --force
-        working-directory: ./app
-      - name: Install Dependencies
-        run: npm ci  # package-lock.json 필요
-        working-directory: ./app
-      - name: Build Vite App
-        run: npm run build
-        working-directory: ./app
-      - name: Debug Build Output
-        run: ls -la ./app/dist
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -50,10 +33,10 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_SAND_05B936500 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/app"
+          app_location: "app"
           api_location: ""
           output_location: "dist"
-          skip_app_build: true  # Azure의 추가 빌드 스킵
+          app_build_command: "npm install && npm run build"
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
