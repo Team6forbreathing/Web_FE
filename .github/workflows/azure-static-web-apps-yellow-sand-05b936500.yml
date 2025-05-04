@@ -15,23 +15,32 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4 # 최신 버전으로 업그레이드
         with:
           submodules: true
           lfs: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4 # 최신 버전 사용
+        with:
+          node-version: '18' # Node.js 버전 명시
+          cache: 'npm' # npm 캐싱으로 빌드 속도 향상
+      - name: Install Dependencies
+        run: npm ci # npm ci로 빠르고 안정적인 설치
+      - name: Build Vite App
+        env:
+          VITE_LOGIN_API_URL: ${{ secrets.VITE_LOGIN_API_URL }}
+          VITE_REGISTRATION_API_URL: ${{ secrets.VITE_REGISTRATION_API_URL }}
+        run: npm run build # Vite 빌드
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_SAND_05B936500 }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/app" # App source code path
-          api_location: "api" # Api source code path - optional
-          output_location: "dist" # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
+          app_location: "/app" # 프론트엔드 소스 경로
+          api_location: "api" # API 경로 (없으면 빈 문자열로)
+          output_location: "dist" # Vite 빌드 출력 경로
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
