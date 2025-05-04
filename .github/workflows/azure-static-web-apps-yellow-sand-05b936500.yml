@@ -19,6 +19,12 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # Node 20으로 업그레이드
+          cache: 'npm'
+          cache-dependency-path: ./app/package-lock.json
       - name: Create .env.production file
         run: |
           echo "VITE_LOGIN_API_URL=${{ secrets.VITE_LOGIN_API_URL }}" > .env.production
@@ -30,7 +36,7 @@ jobs:
         run: npm cache clean --force
         working-directory: ./app
       - name: Install Dependencies
-        run: npm install
+        run: npm ci  # package-lock.json 필요
         working-directory: ./app
       - name: Build Vite App
         run: npm run build
@@ -47,6 +53,7 @@ jobs:
           app_location: "/app"
           api_location: ""
           output_location: "dist"
+          skip_app_build: true  # Azure의 추가 빌드 스킵
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
