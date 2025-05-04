@@ -50,6 +50,7 @@ jobs:
           app_location: "/app"
           api_location: "api"
           output_location: "dist"
+          deployment_environment: "dev"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
