@@ -54,3 +54,7 @@ jobs:
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close Pull Request Job
+        run: echo "Pull request closed, no further action needed."
